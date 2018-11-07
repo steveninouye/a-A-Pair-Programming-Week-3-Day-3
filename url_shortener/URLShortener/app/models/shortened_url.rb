@@ -15,7 +15,7 @@ class ShortenedUrl < ApplicationRecord
   def self.random_code
     while true
       short_url = SecureRandom.urlsafe_base64(4)
-      break unless ActiveRecord.exists?(short_url: short_url)
+      break unless ShortenedUrl.exists?(short_url: short_url)
     end
     short_url
   end
@@ -24,4 +24,13 @@ class ShortenedUrl < ApplicationRecord
     primary_key: :id,
     foreign_key: :user_id,
     class_name: :User
+
+  has_many :visits,
+    primary_key: :id,
+    foreign_key: :url_id,
+    class_name: :Visit
+
+  belongs_to :vistors,
+    through: :visits,
+    source: :users
 end
