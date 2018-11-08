@@ -8,7 +8,7 @@ class User < ApplicationRecord
 
   has_many :visits,
     primary_key: :id,
-    foreign_key: :user_id,
+    foreign_key: :visitor_id,
     class_name: :Visit
 
   has_many :sites_visited,
