@@ -20,6 +20,18 @@ class ShortenedUrl < ApplicationRecord
     short_url
   end
 
+  def num_clicks
+    self.visits.count
+  end
+
+  def num_uniques
+    self.visitors.count
+  end
+
+  def num_recent_uniques
+    self.visitors.where({ updated_at: (10.minutes.ago)..Time.now }).count
+  end
+
   belongs_to :submitter,
     primary_key: :id,
     foreign_key: :user_id,
@@ -30,7 +42,8 @@ class ShortenedUrl < ApplicationRecord
     foreign_key: :url_id,
     class_name: :Visit
 
-  belongs_to :vistors,
+  has_many :visitors,
+    Proc.new { distinct },
     through: :visits,
     source: :users
 end
